@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ambienta — Design System
+   Premium, immersive, dark, purple. All colors HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core surfaces */
+    --background: 0 0% 4%;            /* #0B0B0B */
+    --foreground: 0 0% 92%;           /* #EAEAEA */
+
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 92%;
+
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 92%;
+
+    /* Brand purple */
+    --primary: 258 100% 65%;          /* #7B4DFF */
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 268 100% 75%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 92%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 258 100% 65%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 258 100% 65%;
+
+    --gold: 42 95% 60%;
+
+    --radius: 1rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(258 100% 65%), hsl(280 100% 70%));
+    --gradient-overlay: linear-gradient(180deg, hsl(0 0% 0% / 0.55) 0%, hsl(0 0% 0% / 0.35) 50%, hsl(0 0% 0% / 0.75) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 8% / 0.7), hsl(0 0% 4% / 0.7));
+
+    /* Shadows / glows */
+    --glow-primary: 0 0 40px hsl(258 100% 65% / 0.5);
+    --glow-soft: 0 0 24px hsl(258 100% 65% / 0.25);
+    --shadow-card: 0 20px 60px -20px hsl(0 0% 0% / 0.6);
+
+    /* Motion */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html, body, #root {
+    @apply min-h-full;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: var(--gradient-card);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid hsl(0 0% 100% / 0.08);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  .scene-overlay {
+    background: var(--gradient-overlay);
+  }
+}
+
+/* Background scene crossfade + ken burns */
+@keyframes kenburns {
+  0%   { transform: scale(1.05) translate(0, 0); }
+  100% { transform: scale(1.18) translate(-1.5%, -1.5%); }
+}
+.scene-img {
+  animation: kenburns 30s ease-in-out infinite alternate;
+}
+
+/* Equalizer bars */
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.3); }
+  50%      { transform: scaleY(1); }
+}
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq 1s ease-in-out infinite;
+}
+
+/* Soft pulse for active items */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(258 100% 65% / 0.45); }
+  50%      { box-shadow: 0 0 0 6px hsl(258 100% 65% / 0); }
+}
+.pulse-glow {
+  animation: pulse-glow 2.4s ease-out infinite;
+}
+
+
+/* Fade UI for relax mode */
+.ui-fade-out { opacity: 0; pointer-events: none; transition: opacity 1.2s ease; }
+.ui-fade-in  { opacity: 1; transition: opacity 0.4s ease; }
+
+/* TV / keyboard focus ring — strong, visible from across the room.
+   Only shown when the user is navigating with keyboard/remote. */
+html[data-input="key"] :focus {
+  outline: none;
+}
+html[data-input="key"] :focus-visible,
+html[data-input="key"] *:focus {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 4px;
+  border-radius: 14px;
+  box-shadow: 0 0 0 6px hsl(var(--primary) / 0.25), 0 0 28px hsl(var(--primary) / 0.55);
+  transition: box-shadow 0.15s ease, outline-offset 0.15s ease;
+  z-index: 30;
+  position: relative;
+}
+/* Hide focus ring when using mouse/touch */
+html[data-input="pointer"] :focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
